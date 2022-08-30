@@ -1,0 +1,74 @@
+<div class="container py-5">
+  <div *ngIf="!testStarted; else testTemplate">
+    <label for="name">Enter Your Name</label>
+    <input class="form-control" type="text" required [(ngModel)]="userName" minlength="4" #input ngModel />
+    <button class="btn btn-lg btn-primary mt-3" [disabled]="userName.trim().length < 4" (click)="testStarted = true">
+      Start Practice
+    </button>
+  </div>
+  <ng-template #testTemplate>
+    <div class="test">
+      <h2 class="mb-2 text-center">Practice Started</h2>
+      <h5 class="text-center">Categorize each Word As part of speech</h5>
+      <h5 class="mt-4 mb-3 d-flex justify-content-between mx-auto" style="width: 70%">
+        <span>Student: {{ userName }}</span><span>question:{{questionNumber}}/{{questionsCount}}</span>
+      </h5>
+      <app-progress-bar [Progress]="progress"></app-progress-bar>
+      <br>
+    </div>
+    <div class="row justify-content-center">
+      <div class="d-flex flex-column " >
+        <ng-container *ngIf="!testFinished;else testResultTemplate">
+        <form [formGroup]="testForm" *ngIf="testForm">
+          <div formArrayName="formQuestions">
+            <div *ngFor="let formQuestion of formQuestions.controls;let i=index" [hidden]="i!=questionNumber">
+              <div [formGroupName]="i">
+                <h6 style="font-size:2rem ;"> {{formQuestion.value.question }}</h6>
+                <ul>
+                  <li *ngFor="let answer of answers" style="font-size:2rem ;" class="p-2">
+                    <label [ngClass]="{'selected':option.checked==true}">
+                      <input type="radio" [value]="answer" formControlName="answer" #option
+                        style="margin-right:10px ;" />{{ answer }}
+                    </label>
+                  </li>
+                </ul>
+                <div class="mt-3">
+                  <button class="btn btn-primary" style="width:150px ;" [disabled]="!formQuestion.valid" (click)="submit()">submit</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </form>
+      </ng-container>
+        <ng-template #testResultTemplate>
+          <h4>Congratulations {{userName}} You Finihed The Practice</h4>
+          <h3 class="text-center"> Rank  {{rank$ | async}}</h3>
+          <button class="btn btn-default btn-lg" (click)="tryAgain()">Try Again</button>
+        </ng-template>
+      </div>
+
+    </div>
+
+  </ng-template>
+</div>
+
+<div class="modal" tabindex="-1" role="dialog" [ngStyle]="{'display':display}">
+  <div class="bg-dark w-100 h-100" style="opacity:.4 ;position: absolute;"></div>
+  <div class="modal-dialog  modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-body text-dark">
+        <h4>
+          <ng-container *ngIf="correctAnswer;else wrongAnswerTemplate">
+            Well Done
+          </ng-container>
+          <ng-template #wrongAnswerTemplate>
+            Hard Luck
+          </ng-template>
+        </h4>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-info" (click)="onNextQuestion()">Next</button>
+      </div>
+    </div>
+  </div>
+</div>
