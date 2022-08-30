@@ -1,0 +1,47 @@
+{
+	"info": {
+		"_postman_id": "8bfa6676-bd8d-485c-8c51-62bb93c6c2ac",
+		"name": "twerlo-task",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "10536125"
+	},
+	"item": [
+		{
+			"name": "fetchQuestions",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		},
+		{
+			"name": "submitScore",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"score\":50\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:3000/test/submit",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "3000",
+					"path": [
+						"test",
+						"submit"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
